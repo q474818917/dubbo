@@ -25,3 +25,28 @@ We are now collecting dubbo user info in order to help us to improve dubbo bette
 * [Dubbo developer guide(English)](http://dubbo.apache.org/books/dubbo-dev-book-en/) or [Dubbo开发手册(中文)](http://dubbo.apache.org/books/dubbo-dev-book/) - Detailly introduce the design principal, extension mechanisms, code conventions, version control and building project, etc.
 * [Dubbo admin manual(English)](http://dubbo.apache.org/books/dubbo-admin-book-en/) or [Dubbo管理手册(中文)](http://dubbo.apache.org/books/dubbo-admin-book/) - Describe how to use Dubbo registry and admin-console.
 
+## 架构图
+
+## 流程
+new proxy->InvocationHandler(client.connect)->server-flush
+ServiceConfig-export
+(registry,transport)
+ReferenceConfig-createProxy
+↓
+Proxy
+↓
+InvokerInvocationHandler
+↓
+ClusterInvoker-doInvoke
+↓
+Directory-list
+↓
+Route-route
+↓
+loadbalance-select 
+↓
+DubboInvoker-invoke
+↓
+Exchange(异步无结果、异步有结果、同步)
+↓
+Transporter

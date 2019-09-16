@@ -16,6 +16,7 @@
  */
 package com.alibaba.dubbo.demo.provider;
 
+import com.alibaba.dubbo.container.Main;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Provider {
