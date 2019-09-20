@@ -78,6 +78,7 @@ public class ExtensionLoader<T> {
 
     private final ExtensionFactory objectFactory;
 
+    //反向存储："class com.alibaba.dubbo.rpc.protocol.injvm.InjvmProtocol" -> injvm， key是class
     private final ConcurrentMap<Class<?>, String> cachedNames = new ConcurrentHashMap<Class<?>, String>();
 
     private final Holder<Map<String, Class<?>>> cachedClasses = new Holder<Map<String, Class<?>>>();
@@ -286,6 +287,7 @@ public class ExtensionLoader<T> {
     }
 
     /**
+     * Adaptive -> getExtension
      * Find the extension with the given name. If the specified name is not found, then {@link IllegalStateException}
      * will be thrown.
      */
@@ -495,6 +497,8 @@ public class ExtensionLoader<T> {
                 instance = (T) EXTENSION_INSTANCES.get(clazz);
             }
             injectExtension(instance);
+            //当name是dubbo时，这里会产生两个wrapperClass：ProtocolFilterWrapper,ProtocolListenerWrapper
+            //调用过程：ProtocolFilterWrapper-->ProtocolListenerWrapper-->-->DubboProtocol
             Set<Class<?>> wrapperClasses = cachedWrapperClasses;
             if (wrapperClasses != null && !wrapperClasses.isEmpty()) {
                 for (Class<?> wrapperClass : wrapperClasses) {
@@ -645,6 +649,14 @@ public class ExtensionLoader<T> {
         }
     }
 
+    /**
+     *
+     * @param extensionClasses
+     * @param resourceURL
+     * @param clazz
+     * @param name 这里的值是key
+     * @throws NoSuchMethodException
+     */
     private void loadClass(Map<String, Class<?>> extensionClasses, java.net.URL resourceURL, Class<?> clazz, String name) throws NoSuchMethodException {
         if (!type.isAssignableFrom(clazz)) {
             throw new IllegalStateException("Error when load extension class(interface: " +

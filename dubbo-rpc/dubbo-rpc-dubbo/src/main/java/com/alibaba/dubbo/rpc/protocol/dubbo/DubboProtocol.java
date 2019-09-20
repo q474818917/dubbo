@@ -248,6 +248,7 @@ public class DubboProtocol extends AbstractProtocol {
             }
         }
 
+        //这里的url是providerUrl
         openServer(url);
         optimizeSerialization(url);
         return exporter;
@@ -261,6 +262,7 @@ public class DubboProtocol extends AbstractProtocol {
         if (isServer) {
             ExchangeServer server = serverMap.get(key);
             if (server == null) {
+                //开启netty server
                 serverMap.put(key, createServer(url));
             } else {
                 // server supports reset, use together with override

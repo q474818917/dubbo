@@ -124,7 +124,13 @@ public class RegistryProtocol implements Protocol {
         return overrideListeners;
     }
 
+    /**
+     *
+     * @param registryUrl:注册中心以及注册方式
+     * @param registedProviderUrl:需要注册的providerUrl
+     */
     public void register(URL registryUrl, URL registedProviderUrl) {
+        //根据registryUrl的protocol确定registry类型，DubboRegistry、MulticastRegistry
         Registry registry = registryFactory.getRegistry(registryUrl);
         registry.register(registedProviderUrl);
     }
@@ -134,9 +140,10 @@ public class RegistryProtocol implements Protocol {
         //export invoker
         final ExporterChangeableWrapper<T> exporter = doLocalExport(originInvoker);
 
+        //获取dubbo:registry配置的address
         URL registryUrl = getRegistryUrl(originInvoker);
 
-        //registry provider
+        //registry provider，获取registry是dubbo还是multi
         final Registry registry = getRegistry(originInvoker);
         final URL registeredProviderUrl = getRegisteredProviderUrl(originInvoker);
 

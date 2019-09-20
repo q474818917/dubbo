@@ -97,6 +97,10 @@ public class ServiceBean<T> extends ServiceConfig<T> implements InitializingBean
         return service;
     }
 
+    /**
+     * event消费
+     * @param event
+     */
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (isDelay() && !isExported() && !isUnexported()) {
@@ -116,6 +120,10 @@ public class ServiceBean<T> extends ServiceConfig<T> implements InitializingBean
         return supportedApplicationListener && (delay == null || delay == -1);
     }
 
+    /**
+     * 由DubboNamespaceHandler初始化进入到这里
+     * @throws Exception
+     */
     @Override
     @SuppressWarnings({"unchecked", "deprecation"})
     public void afterPropertiesSet() throws Exception {
@@ -268,7 +276,7 @@ public class ServiceBean<T> extends ServiceConfig<T> implements InitializingBean
         publishExportEvent();
     }
 
-    /**
+    /**生产ExportEvent
      * @since 2.6.5
      */
     private void publishExportEvent() {
@@ -292,6 +300,7 @@ public class ServiceBean<T> extends ServiceConfig<T> implements InitializingBean
     }
 
     /**
+     * 实现ApplicationEventPublisherAware接口，作用：设置Event生产者
      * @param applicationEventPublisher
      * @since 2.6.5
      */
